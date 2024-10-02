@@ -51,7 +51,7 @@ const Courses = () => {
             setEnrollmentIds(enrollmentMap);
         } catch (error) {
             console.error('Error fetching enrolled courses:', error);
-            setSnackbarMessage('Error fetching enrolled courses.');
+            setSnackbarMessage('Not Enrolled in any of the Courses');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
@@ -90,7 +90,7 @@ const Courses = () => {
             handleGetStarted(courseId, enrollmentId);
         } catch (error) {
             console.error('Error enrolling in course:', error);
-            setSnackbarMessage('Error enrolling in course.');
+            setSnackbarMessage('Not enrolled in any COURSES');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }

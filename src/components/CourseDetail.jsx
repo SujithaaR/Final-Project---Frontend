@@ -14,11 +14,15 @@ import {
     ListItemText,
     Divider,
     Alert,
+    LinearProgress,
+    IconButton // Import IconButton
 } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the back arrow icon
 
 const CourseDetails = () => {
     const location = useLocation();
+    const navigate = useNavigate(); // Hook for navigation
     const { enrollmentId, courseId } = location.state || {};
 
     const [course, setCourse] = useState(null);
@@ -28,6 +32,7 @@ const CourseDetails = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [completedSubtopics, setCompletedSubtopics] = useState({});
     const [progress, setProgress] = useState(0);
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         if (courseId) {
@@ -65,21 +70,11 @@ const CourseDetails = () => {
             });
 
             const enrollment = response.data;
-
             setCompletedCount(enrollment.completedCount);
             setProgress(enrollment.progress);
-
-            // Initialize completed subtopics from enrollment data
-            const completedSubtopicIds = {};
-            enrollment.topics.forEach(topic => {
-                topic.subtopics.forEach(subtopic => {
-                    completedSubtopicIds[subtopic._id] = subtopic.completed; // Ensure `subtopic.completed` reflects true/false
-                });
-            });
-            setCompletedSubtopics(completedSubtopicIds);
         } catch (error) {
             console.error('Error fetching enrollment details:', error);
-            setSnackbarMessage('Error fetching enrollment details.');
+            setSnackbarMessage('Not Started the course');
             setSnackbarOpen(true);
         }
     };
@@ -91,34 +86,43 @@ const CourseDetails = () => {
             return;
         }
 
+        if (completedCount >= totalCount) {
+            setSnackbarMessage('All content is already completed!');
+            setSnackbarOpen(true);
+            return; // Prevent further completion if all content is completed
+        }
+
         // Optimistically update completed subtopics
         const newCompletedSubtopics = { ...completedSubtopics, [subtopicId]: true };
         setCompletedSubtopics(newCompletedSubtopics);
 
         try {
             const newCompletedCount = completedCount + 1;
+            const newProgress = Math.round((newCompletedCount / totalCount) * 100); // Calculate new progress
 
             await axios.put(`http://localhost:3000/api/progress/update`, {
                 enrollmentId,
                 completedContentCount: newCompletedCount,
                 totalContentCount: totalCount,
-                timeSpent: 0, // Adjust as needed
+                timeSpent: 0,
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
 
-            // Update completedCount state
             setCompletedCount(newCompletedCount);
+            setProgress(newProgress);
 
-            // Optionally refetch to ensure everything is in sync
-            await fetchEnrollmentDetails();
-            setSnackbarMessage(`Completed: ${title}`);
+            if (newCompletedCount === totalCount) {
+                setSnackbarMessage('Congratulations! You have completed the entire course.');
+            } else {
+                setSnackbarMessage(`Completed: ${title}`);
+            }
         } catch (error) {
             console.error('Error updating progress:', error.response || error.message);
             setSnackbarMessage('Error updating progress: ' + (error.response?.data?.message || 'Unknown error.'));
-            // Rollback optimistic update if there's an error
+            // Rollback optimistic update in case of error
             setCompletedSubtopics(completedSubtopics);
         } finally {
             setSnackbarOpen(true);
@@ -129,8 +133,20 @@ const CourseDetails = () => {
         setSnackbarOpen(false);
     };
 
+    const handleTakeQuiz = () => {
+        navigate(`/quiz/${courseId}`, { state: { userId, enrollmentId, courseId } });
+    };
+
+    const handleBackClick = () => {
+        navigate(-1); // Navigate back to the previous page
+    };
+
     return (
         <Container>
+            <IconButton onClick={handleBackClick} style={{ marginBottom: '20px' }}>
+                <ArrowBackIcon />
+            </IconButton>
+
             {course && (
                 <>
                     <Typography variant="h4" gutterBottom>
@@ -139,10 +155,12 @@ const CourseDetails = () => {
                     <Typography variant="body1" gutterBottom>
                         {course.description}
                     </Typography>
-                    
+
+                    {/* Progress Bar */}
                     <Typography variant="h6" gutterBottom>
-                        Total Content: {totalCount} | Completed: {completedCount} | Progress: {progress}%
+                        Progress: {progress}% ({completedCount} of {totalCount} completed)
                     </Typography>
+                    <LinearProgress variant="determinate" value={progress} style={{ marginBottom: '20px' }} />
 
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={4}>
@@ -168,9 +186,9 @@ const CourseDetails = () => {
                                                 />
                                                 {completedSubtopics[subtopic._id] && <span>✔️</span>}
                                             </ListItem>
-                                        ))}
+                                        ))}                                   
                                     </div>
-                                ))}
+                                ))}                               
                             </List>
                         </Grid>
 
@@ -200,6 +218,13 @@ const CourseDetails = () => {
                             ))}
                         </Grid>
                     </Grid>
+
+                    {/* Take Quiz Button */}
+                    {completedCount === totalCount && (
+                        <Button variant="contained" color="primary" onClick={handleTakeQuiz} style={{ marginTop: '20px' }}>
+                            Take Quiz
+                        </Button>
+                    )}
 
                     <Snackbar
                         open={snackbarOpen}
