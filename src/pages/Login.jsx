@@ -32,6 +32,9 @@ const Login = () => {
            
             localStorage.setItem('token', response.data.token); // Store the token
             localStorage.setItem('userId', response.data.user.id); // Update this line to extract user ID correctly
+             // Set the session start time
+            localStorage.setItem('sessionStartTime', Date.now()); // Store the current timestamp as session start time
+            
             setSnackbarMessage('Login successful!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
