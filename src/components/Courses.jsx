@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions, Grid } from '@mui/material';
+import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
     const [courses, setCourses] = useState([]);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
-    const [enrollmentIds, setEnrollmentIds] = useState({}); // Track enrollment IDs for each course
+    const [enrollmentIds, setEnrollmentIds] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -43,10 +43,9 @@ const Courses = () => {
             });
             const enrollments = response.data;
             setEnrolledCourses(enrollments.map(enrollment => enrollment.courseId._id));
-            // Store enrollment IDs in the state
             const enrollmentMap = {};
             enrollments.forEach(enrollment => {
-                enrollmentMap[enrollment.courseId._id] = enrollment._id; // Save mapping of courseId to enrollmentId
+                enrollmentMap[enrollment.courseId._id] = enrollment._id;
             });
             setEnrollmentIds(enrollmentMap);
         } catch (error) {
@@ -79,14 +78,12 @@ const Courses = () => {
 
             const enrollmentId = response.data.enrollment._id;
 
-            // Update local state to reflect enrollment
             setEnrolledCourses((prev) => [...prev, courseId]);
-            setEnrollmentIds((prev) => ({ ...prev, [courseId]: enrollmentId })); // Store the new enrollment ID
+            setEnrollmentIds((prev) => ({ ...prev, [courseId]: enrollmentId }));
             setSnackbarMessage('Enrollment successful!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
 
-            // Navigate to the CourseDetails page
             handleGetStarted(courseId, enrollmentId);
         } catch (error) {
             console.error('Error enrolling in course:', error);
@@ -101,28 +98,36 @@ const Courses = () => {
     };
 
     const handleGetStarted = (courseId, enrollmentId) => {
-
-        navigate(`/courses/${courseId}`, { state: { enrollmentId,courseId } }); // Pass enrollmentId in state
+        navigate(`/courses/${courseId}`, { state: { enrollmentId, courseId } });
     };
 
     return (
         <Container>
-            <Typography variant="h4" gutterBottom>
+            <Typography 
+                variant="h4" 
+                gutterBottom 
+                style={{ 
+                    marginTop: '20px', 
+                    color: '#00008B', 
+                    fontWeight: 'bold', 
+                    textAlign: 'center', 
+                }}
+            >
                 Available Courses
             </Typography>
             <Grid container spacing={3}>
                 {courses.map((course) => (
                     <Grid item xs={12} sm={6} md={4} key={course._id}>
-                        <Card variant="outlined">
+                        <Card variant="outlined" style={{ transition: '0.3s', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
                             <CardContent>
-                                <Typography variant="h5" component="div">
+                                <Typography variant="h5" component="div" style={{ fontWeight: 'bold', color: '#1976d2' }}>
                                     {course.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     {course.description}
                                 </Typography>
                             </CardContent>
-                            <CardActions>
+                            <CardActions style={{ justifyContent: 'space-between' }}>
                                 {enrolledCourses.includes(course._id) ? (
                                     <>
                                         <Button variant="contained" color="success" disabled>
@@ -130,7 +135,7 @@ const Courses = () => {
                                         </Button>
                                         <Button
                                             variant="outlined"
-                                            onClick={() => handleGetStarted(course._id, enrollmentIds[course._id])} // Use enrollmentId from the state
+                                            onClick={() => handleGetStarted(course._id, enrollmentIds[course._id])}
                                         >
                                             Get Started
                                         </Button>

@@ -15,16 +15,15 @@ import {
     Divider,
     Alert,
     LinearProgress,
-    IconButton // Import IconButton
+    IconButton
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the back arrow icon
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const CourseDetails = () => {
     const location = useLocation();
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate();
     const { enrollmentId, courseId } = location.state || {};
-
     const [course, setCourse] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -89,16 +88,15 @@ const CourseDetails = () => {
         if (completedCount >= totalCount) {
             setSnackbarMessage('All content is already completed!');
             setSnackbarOpen(true);
-            return; // Prevent further completion if all content is completed
+            return;
         }
 
-        // Optimistically update completed subtopics
         const newCompletedSubtopics = { ...completedSubtopics, [subtopicId]: true };
         setCompletedSubtopics(newCompletedSubtopics);
 
         try {
             const newCompletedCount = completedCount + 1;
-            const newProgress = Math.round((newCompletedCount / totalCount) * 100); // Calculate new progress
+            const newProgress = Math.round((newCompletedCount / totalCount) * 100);
 
             await axios.put(`http://localhost:3000/api/progress/update`, {
                 enrollmentId,
@@ -122,7 +120,6 @@ const CourseDetails = () => {
         } catch (error) {
             console.error('Error updating progress:', error.response || error.message);
             setSnackbarMessage('Error updating progress: ' + (error.response?.data?.message || 'Unknown error.'));
-            // Rollback optimistic update in case of error
             setCompletedSubtopics(completedSubtopics);
         } finally {
             setSnackbarOpen(true);
@@ -138,21 +135,21 @@ const CourseDetails = () => {
     };
 
     const handleBackClick = () => {
-        navigate(-1); // Navigate back to the previous page
+        navigate(-1);
     };
 
     return (
-        <Container>
-            <IconButton onClick={handleBackClick} style={{ marginBottom: '20px' }}>
+        <Container style={{ marginTop:'30px'}}>
+            <IconButton onClick={handleBackClick} style={{ marginBottom: '20px', color: '#1976d2' }}>
                 <ArrowBackIcon />
             </IconButton>
 
             {course && (
                 <>
-                    <Typography variant="h4" gutterBottom>
+                    <Typography variant="h4" gutterBottom style={{ color: '#2c3e50', fontWeight: '600' }}>
                         {course.title}
                     </Typography>
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body1" gutterBottom style={{ marginBottom: '20px', fontSize: '1.1rem' }}>
                         {course.description}
                     </Typography>
 
@@ -160,7 +157,7 @@ const CourseDetails = () => {
                     <Typography variant="h6" gutterBottom>
                         Progress: {progress}% ({completedCount} of {totalCount} completed)
                     </Typography>
-                    <LinearProgress variant="determinate" value={progress} style={{ marginBottom: '20px' }} />
+                    <LinearProgress variant="determinate" value={progress} style={{ marginBottom: '20px', borderRadius: '5px', height: '10px' }} />
 
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={4}>
@@ -176,6 +173,13 @@ const CourseDetails = () => {
                                                 button
                                                 key={subtopic._id}
                                                 onClick={() => handleComplete(subtopic._id, subtopic.title)}
+                                                style={{
+                                                    backgroundColor: completedSubtopics[subtopic._id] ? '#e8f5e9' : 'transparent',
+                                                    transition: 'background-color 0.3s',
+                                                    '&:hover': {
+                                                        backgroundColor: completedSubtopics[subtopic._id] ? '#e8f5e9' : '#f1f1f1'
+                                                    }
+                                                }}
                                             >
                                                 <ListItemText
                                                     primary={subtopic.title}
@@ -193,20 +197,27 @@ const CourseDetails = () => {
                         </Grid>
 
                         <Grid item xs={12} md={8}>
-                            <Typography variant="h5">Course Content</Typography>
+                            <Typography variant="h5" style={{ marginBottom: '20px', fontWeight: '600' }}>Course Content</Typography>
                             {course.topics.map((topic) => (
-                                <Card variant="outlined" key={topic._id} sx={{ mb: 2 }}>
+                                <Card variant="outlined" key={topic._id} sx={{ mb: 2, boxShadow: 3 }}>
                                     <CardContent>
-                                        <Typography variant="h6">{topic.title}</Typography>
+                                        <Typography variant="h6" style={{ color: '#1976d2', fontWeight: '500' }}>{topic.title}</Typography>
                                         {topic.subtopics.map((subtopic) => (
-                                            <div key={subtopic._id}>
+                                            <div key={subtopic._id} style={{ marginBottom: '10px' }}>
                                                 <Typography variant="body2">{subtopic.title}</Typography>
                                                 <CardActions>
                                                     <Button
                                                         variant="contained"
                                                         color={completedSubtopics[subtopic._id] ? 'success' : 'primary'}
                                                         onClick={() => handleComplete(subtopic._id, subtopic.title)}
-                                                        disabled={completedSubtopics[subtopic._id]} // Disable if already completed
+                                                        disabled={completedSubtopics[subtopic._id]}
+                                                        style={{
+                                                            borderRadius: '20px',
+                                                            transition: 'background-color 0.3s',
+                                                            '&:hover': {
+                                                                backgroundColor: completedSubtopics[subtopic._id] ? '#388e3c' : '#1976d2'
+                                                            }
+                                                        }}
                                                     >
                                                         {completedSubtopics[subtopic._id] ? 'Completed' : 'Complete'}
                                                     </Button>
@@ -221,22 +232,19 @@ const CourseDetails = () => {
 
                     {/* Take Quiz Button */}
                     {completedCount === totalCount && (
-                        <Button variant="contained" color="primary" onClick={handleTakeQuiz} style={{ marginTop: '20px' }}>
+                        <Button variant="contained" color="primary" onClick={handleTakeQuiz} style={{ marginTop: '20px', borderRadius: '20px' }}>
                             Take Quiz
                         </Button>
                     )}
-
-                    <Snackbar
-                        open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={handleSnackbarClose}
-                    >
-                        <Alert onClose={handleSnackbarClose} severity="success">
-                            {snackbarMessage}
-                        </Alert>
-                    </Snackbar>
                 </>
             )}
+
+            {/* Snackbar for notifications */}
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 };

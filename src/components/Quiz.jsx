@@ -10,9 +10,10 @@ import {
     Radio,
     Snackbar,
     Alert,
-    IconButton, // Import IconButton for the back arrow
+    IconButton,
+    Box, 
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back arrow icon
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import questions from './quizQuestions';
 
 const StaticQuiz = () => {
@@ -20,7 +21,6 @@ const StaticQuiz = () => {
     const navigate = useNavigate(); 
     const { userId, courseId, enrollmentId } = location.state || {};
 
-    // Ensure required parameters are available
     if (!userId || !courseId || !enrollmentId) {
         console.error('Required parameters are missing:', { userId, courseId, enrollmentId });
         return <div>Error: Required parameters are missing.</div>;
@@ -31,7 +31,6 @@ const StaticQuiz = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [quizSubmitted, setQuizSubmitted] = useState(false);
     const [previousScores, setPreviousScores] = useState(null);
-
     const [answers, setAnswers] = useState({});
 
     useEffect(() => {
@@ -105,29 +104,30 @@ const StaticQuiz = () => {
         navigate('/feedback', { state: { userId, courseId, enrollmentId } });
     };
 
-    // Function to handle back navigation
     const handleBackClick = () => {
-        navigate(-1); // Navigate back to the previous page
+        navigate(-1);
     };
 
     return (
-        <Container>
+        <Container sx={{ padding: '20px',  }}>
             <IconButton onClick={handleBackClick} style={{ marginBottom: '16px' }}>
                 <ArrowBackIcon />
             </IconButton>
 
-            <Typography variant="h4" gutterBottom>Quiz</Typography>
+            <Typography variant="h4" gutterBottom sx={{ marginTop: '16px', color: '#333', fontWeight: 'bold' }}>
+                Quiz
+            </Typography>
 
             {quizSubmitted ? (
-                <Typography variant="h6" style={{ marginTop: '20px' }}>
+                <Typography variant="h6" sx={{ marginTop: '20px', color: '#444' }}>
                     {previousScores 
                         ? `You have already taken this quiz. Your score: ${previousScores.obtainedScore}` 
                         : 'Thank you for taking the test! Your score: ' + marks}
                 </Typography>
             ) : (
                 questions.map((question) => (
-                    <div key={question.id}>
-                        <Typography variant="h6">{question.question}</Typography>
+                    <Box key={question.id} sx={{ marginBottom: '20px', backgroundColor: '#fff', borderRadius: '4px', padding: '16px', boxShadow: 2 }}>
+                        <Typography variant="h6" sx={{ marginBottom: '8px', color: '#555' }}>{question.question}</Typography>
                         <RadioGroup
                             value={answers[question.id] || ''}
                             onChange={(e) => handleAnswerChange(question.id, e.target.value)}
@@ -136,21 +136,21 @@ const StaticQuiz = () => {
                                 <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
                             ))}
                         </RadioGroup>
-                    </div>
+                    </Box>
                 ))
             )}
 
             {!quizSubmitted && (
-                <Button variant="contained" color="primary" onClick={handleSubmitQuiz}>
+                <Button variant="contained" color="primary" onClick={handleSubmitQuiz} sx={{ marginTop: '20px' }}>
                     Submit Quiz
                 </Button>
             )}
 
-            <Button variant="contained" color="secondary" onClick={handleDiscussionClick} style={{ marginTop: '20px' }}>
+            <Button variant="contained" color="secondary" onClick={handleDiscussionClick} sx={{ marginTop: '20px', marginLeft: '20px' ,marginRight:'20px'}}>
                 Discussion
             </Button>
 
-            <Button variant="contained" color="secondary" onClick={handleFeedbackClick} style={{ marginTop: '20px' }}>
+            <Button variant="contained" color="secondary" onClick={handleFeedbackClick} sx={{ marginTop: '20px' }}>
                 Feedback
             </Button>
 

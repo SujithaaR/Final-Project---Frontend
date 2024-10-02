@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     Container,
     Typography,
@@ -8,14 +8,15 @@ import {
     Snackbar,
     Alert,
     Rating,
-    IconButton, // Import IconButton for the back arrow
+    IconButton,
+    Box,
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back arrow icon
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 
 const FeedbackPage = () => {
     const location = useLocation();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
     const { userId, courseId, enrollmentId } = location.state || {};
 
     const [overallSatisfaction, setOverallSatisfaction] = useState(0);
@@ -67,36 +68,56 @@ const FeedbackPage = () => {
     };
 
     return (
-        <Container>
+        <Container 
+            maxWidth="md" 
+            style={{ 
+                backgroundColor: '#fff', 
+                padding: '40px 20px',
+                borderRadius: '8px', 
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', 
+                marginTop: '40px', 
+                marginBottom: '20px'
+            }}
+        >
             <IconButton onClick={handleBackClick} style={{ marginBottom: '16px' }}>
                 <ArrowBackIcon />
             </IconButton>
 
-            <Typography variant="h4" gutterBottom>
-                Course Feedback
+            <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '20px', color: '#1976d2' }}>
+                We Value Your Feedback!
+            </Typography>
+
+            <Typography variant="h6" align="center" style={{ marginBottom: '20px', fontWeight: '300' }}>
+                Please help us improve by sharing your thoughts.
             </Typography>
 
             <form onSubmit={handleSubmitFeedback}>
-                <Typography variant="h6">Overall Satisfaction</Typography>
-                <Rating
-                    value={overallSatisfaction}
-                    onChange={(event, newValue) => setOverallSatisfaction(newValue)}
-                    precision={0.5}
-                />
+                <Box sx={{ marginBottom: '20px' }}>
+                    <Typography variant="h6">Overall Satisfaction</Typography>
+                    <Rating
+                        value={overallSatisfaction}
+                        onChange={(event, newValue) => setOverallSatisfaction(newValue)}
+                        precision={0.5}
+                    />
+                </Box>
 
-                <Typography variant="h6">Content Quality</Typography>
-                <Rating
-                    value={contentQuality}
-                    onChange={(event, newValue) => setContentQuality(newValue)}
-                    precision={0.5}
-                />
+                <Box sx={{ marginBottom: '20px' }}>
+                    <Typography variant="h6">Content Quality</Typography>
+                    <Rating
+                        value={contentQuality}
+                        onChange={(event, newValue) => setContentQuality(newValue)}
+                        precision={0.5}
+                    />
+                </Box>
 
-                <Typography variant="h6">Instructor Effectiveness</Typography>
-                <Rating
-                    value={instructorEffectiveness}
-                    onChange={(event, newValue) => setInstructorEffectiveness(newValue)}
-                    precision={0.5}
-                />
+                <Box sx={{ marginBottom: '20px' }}>
+                    <Typography variant="h6">Instructor Effectiveness</Typography>
+                    <Rating
+                        value={instructorEffectiveness}
+                        onChange={(event, newValue) => setInstructorEffectiveness(newValue)}
+                        precision={0.5}
+                    />
+                </Box>
 
                 <TextField
                     label="Additional Comments"
@@ -109,7 +130,18 @@ const FeedbackPage = () => {
                     style={{ marginTop: '16px' }}
                 />
 
-                <Button variant="contained" color="primary" type="submit" style={{ marginTop: '16px' }}>
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    type="submit" 
+                    style={{ 
+                        marginTop: '16px', 
+                        padding: '10px 20px', 
+                        fontSize: '16px', 
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                    }}
+                >
                     Submit Feedback
                 </Button>
             </form>

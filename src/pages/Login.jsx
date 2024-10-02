@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Snackbar } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -34,11 +34,17 @@ const Login = () => {
             localStorage.setItem('userId', response.data.user.id); // Update this line to extract user ID correctly
              // Set the session start time
             localStorage.setItem('sessionStartTime', Date.now()); // Store the current timestamp as session start time
-            
+            localStorage.setItem('isAdmin', response.data.user.isAdmin);
+
             setSnackbarMessage('Login successful!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-            navigate('/courses'); // Navigate to the courses page after successful login
+              // Check if the user is an admin
+              if (response.data.user.isAdmin) {
+                navigate('/Admin'); // Navigate to admin dashboard
+            } else {
+                navigate('/courses'); // Navigate to the courses page
+            }
         } catch (error) {
             setSnackbarMessage('Login failed: ' + error.response.data.message);
             setSnackbarSeverity('error');
@@ -56,57 +62,97 @@ const Login = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography component="h1" variant="h5">
+        <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+        <Box 
+            sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                padding: '2rem',
+                borderRadius: '10px',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+            }}
+        >
+            <Typography component="h1" variant="h5" sx={{ fontWeight: 'bold', color: '#34495e', mb: 2 }}>
+                Login
+            </Typography>
+            <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Username"
+                    name="username"
+                    value={credentials.username}
+                    onChange={handleChange}
+                    sx={{
+                        backgroundColor: '#fff',
+                        borderRadius: '5px',
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: '#ddd', 
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#2980b9', 
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#2980b9', 
+                            },
+                        },
+                    }}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    type={showPassword ? 'text' : 'password'} // Toggle password visibility
+                    label="Password"
+                    name="password"
+                    value={credentials.password}
+                    onChange={handleChange}
+                    sx={{
+                        backgroundColor: '#fff',
+                        borderRadius: '5px',
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: '#ddd',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#2980b9',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#2980b9',
+                            },
+                        },
+                    }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: '#2980b9', '&:hover': { backgroundColor: '#1e6a94' } }}>
                     Login
-                </Typography>
-                <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        label="Username"
-                        name="username"
-                        value={credentials.username}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        type={showPassword ? 'text' : 'password'} // Toggle password visibility
-                        label="Password"
-                        name="password"
-                        value={credentials.password}
-                        onChange={handleChange}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                        Login
-                    </Button>
-                </form>
-            </Box>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000} // Duration before it automatically closes
-                onClose={handleSnackbarClose}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Position of the Snackbar
-            />
-        </Container>
+                </Button>
+            </form>
+        </Box>
+        <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={5000} // Duration before it automatically closes
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+            severity={snackbarSeverity}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Position of the Snackbar
+        />
+    </Container>
     );
 };
 

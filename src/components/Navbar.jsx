@@ -1,4 +1,3 @@
-// Navbar.jsx
 import React from 'react';
 import { AppBar, Toolbar, Button, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,18 +6,17 @@ import axios from 'axios';
 const Navbar = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Check if the user is an admin
 
     const handleLogout = async () => {
         const sessionStartTime = localStorage.getItem('sessionStartTime');
-        const token = localStorage.getItem('token');
       
         if (sessionStartTime && token) {
             const sessionEndTime = Date.now();
             const sessionDuration = (sessionEndTime - sessionStartTime) / 1000; // Time in seconds
-            
-            
+          
             try {
-                // Optionally send the time spent to the backend
+                
                 await axios.put('http://localhost:3000/api/users/update-time', {
                     sessionDuration, // Send the session duration to the backend
                 }, {
@@ -29,7 +27,6 @@ const Navbar = () => {
     
                 console.log(`Session time sent: ${sessionDuration} seconds`);
             } catch (error) {
-             
                 console.error('Error updating time spent:', error);
                 alert('Error updating your session time. Please try again later.');
             }
@@ -37,8 +34,9 @@ const Navbar = () => {
     
         // Clear localStorage or session data
         localStorage.removeItem('token');
-        localStorage.removeItem('userId'); // If you stored userId
-        localStorage.removeItem('sessionStartTime'); // If tracking start time
+        localStorage.removeItem('userId'); 
+        localStorage.removeItem('isAdmin'); 
+        localStorage.removeItem('sessionStartTime'); 
     
         // Navigate to login page after successful logout
         navigate('/login');
@@ -52,11 +50,27 @@ const Navbar = () => {
                 </Typography>
                 {token ? (
                     <>
-                        <Button color="inherit" component={Link} to="/courses">
-                            Courses
-                        </Button>
+                        {isAdmin ? (
+                            <>
+                                <Button color="inherit" component={Link} to="/admin-dashboard">
+                                    Admin Dashboard
+                                </Button>
+                                <Typography color="inherit" >
+                                     ADMIN
+                                </Typography>
+                            </>
+                        ) : (
+                            <>
+                                <Button color="inherit" component={Link} to="/courses">
+                                    Courses
+                                </Button>
+                                <Typography color="inherit" >
+                                    EMPLOYEE
+                                </Typography>
+                            </>
+                        )}
                         <Button color="inherit" onClick={handleLogout}>
-                            Logout
+                            LOGOUT
                         </Button>
                     </>
                 ) : (
@@ -75,4 +89,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

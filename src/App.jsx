@@ -10,6 +10,7 @@ import CourseDetail from './components/CourseDetail';
 import Quiz from './components/Quiz';
 import Discussion from './components/Discussion';
 import Feedback from './components/Feedback';
+import Admin from './pages/Admin';
 
 const App = () => {
     return (
@@ -20,11 +21,11 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/courses" element={<Courses />} />
-                <Route path="/courses/:courseId" element={<CourseDetail />} /> {/* Add this line */}
+                <Route path="/courses/:courseId" element={<CourseDetail />} /> 
                 <Route path="/quiz/:courseId" element={<Quiz />} />
                 <Route path="/discussion" element={<Discussion />} />
                 <Route path="/feedback" element={<Feedback />} />
-
+                <Route path="/Admin" element={<Admin/>}/>
             </Routes>
         </Router>
     );
