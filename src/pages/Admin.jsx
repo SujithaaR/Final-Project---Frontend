@@ -15,23 +15,28 @@ const AdminDashboard = () => {
     discussionChart: { series: [], options: {} },
     feedbackChart: { series: [], options: {} },
   });
+  const [totalTimeSpent, setTotalTimeSpent] = useState(0); // State for total time spent
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const enrollmentsResponse = await axios.get(
-          "http://localhost:3000/api/enrollments/all/data"
-        );
+        const enrollmentsResponse = await axios.get("http://localhost:3000/api/enrollments/all/data");
         const enrollmentList = enrollmentsResponse.data;
         setEnrollmentData(enrollmentList);
         setFilteredData(enrollmentList);
 
         const usersResponse = await axios.get("http://localhost:3000/api/users/all");
         const usersList = usersResponse.data;
-        const userOptions = usersList.map((user) => ({
-          id: user._id,
-          name: user.username,
-        }));
+
+        // Filter users to include only non-admins
+        const userOptions = usersList
+          .filter(user => !user.isAdmin) // Exclude admin users
+          .map(user => ({
+            id: user._id,
+            name: user.username,
+            timeSpent: user.timeSpent || 0, // Ensure to get time spent
+          }));
+
         setUserOptions(userOptions);
 
         const processedCharts = processChartData(enrollmentList);
@@ -49,10 +54,14 @@ const AdminDashboard = () => {
     if (selectedUser) {
       filtered = filtered.filter((enroll) => enroll.userId === selectedUser);
     }
+
+    const selectedUserData = userOptions.find(user => user.id === selectedUser);
+    setTotalTimeSpent(selectedUserData ? selectedUserData.timeSpent : 0); // Update total time spent
+
     setFilteredData(filtered);
     const processedCharts = processChartData(filtered);
     setChartData(processedCharts);
-  }, [selectedUser, enrollmentData]);
+  }, [selectedUser, enrollmentData, userOptions]);
 
   const processChartData = (enrollments) => {
     const coursesCompleted = enrollments.filter((enroll) => enroll.completed).length;
@@ -98,13 +107,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-         <h2 className="admin-header">
-        Admin Dashboard
-        </h2>
-        <div className="nav-links">
+      <h2 className="admin-header">Admin Dashboard</h2>
+      <div className="nav-links">
         <Link to="/admin/feedback">Employee Feedback</Link>
         <Link to="/admin/comments">Employee Comments</Link>
-        <Link to="/admin/scores">Employee scores</Link>
+        <Link to="/admin/scores">Employee Scores</Link>
       </div>
 
       <div className="filters">
@@ -132,9 +139,17 @@ const AdminDashboard = () => {
           <h4>Quizzes Taken</h4>
           <p>{filteredData.filter((enroll) => enroll.isQuizTaken).length}</p>
         </div>
+
+        {/* Only render the Total Time Spent card when a specific user is selected */}
+        {selectedUser && (
+          <div className="card">
+            <h4>Total Time Spent</h4>
+            <p>{totalTimeSpent} seconds</p> {/* Display total time spent in seconds */}
+          </div>
+        )}
       </div>
 
-      {/* Two pie charts in a row */}
+      {/* Pie charts */}
       <div className="charts">
         <div>
           <h3>Courses Progress</h3>

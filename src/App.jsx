@@ -14,6 +14,7 @@ import Admin from './pages/Admin';
 import AdminFeedback from './pages/AdminFeedback';
 import AdminComments from './pages/AdminComments';
 import ScorePage from './pages/Score';
+import AdminCourse from './pages/AdminCourse';
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                 <Route path="/admin/feedback" element={<AdminFeedback />} />
                 <Route path="/admin/comments" element={<AdminComments />} />
                 <Route path="/admin/scores" element={<ScorePage/>}/>
+                <Route path="/admin-course" element={<AdminCourse/>}/>
             </Routes>
         </Router>
     );
