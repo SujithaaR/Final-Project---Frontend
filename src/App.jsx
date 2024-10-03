@@ -11,6 +11,9 @@ import Quiz from './components/Quiz';
 import Discussion from './components/Discussion';
 import Feedback from './components/Feedback';
 import Admin from './pages/Admin';
+import AdminFeedback from './pages/AdminFeedback';
+import AdminComments from './pages/AdminComments';
+import ScorePage from './pages/Score';
 
 const App = () => {
     return (
@@ -26,6 +29,9 @@ const App = () => {
                 <Route path="/discussion" element={<Discussion />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/Admin" element={<Admin/>}/>
+                <Route path="/admin/feedback" element={<AdminFeedback />} />
+                <Route path="/admin/comments" element={<AdminComments />} />
+                <Route path="/admin/scores" element={<ScorePage/>}/>
             </Routes>
         </Router>
     );

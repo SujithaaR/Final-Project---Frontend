@@ -119,11 +119,27 @@ const StaticQuiz = () => {
             </Typography>
 
             {quizSubmitted ? (
-                <Typography variant="h6" sx={{ marginTop: '20px', color: '#444' }}>
-                    {previousScores 
-                        ? `You have already taken this quiz. Your score: ${previousScores.obtainedScore}` 
-                        : 'Thank you for taking the test! Your score: ' + marks}
-                </Typography>
+               <Typography
+               variant="h6"
+               sx={{
+                   marginTop: '20px',
+                   color: '#444',
+                   textAlign: 'center', 
+                   padding: '16px', 
+                   backgroundColor: previousScores ? '#e0f7fa' : '#fce4ec', 
+                   borderRadius: '8px', 
+                   boxShadow: 2, 
+                   fontWeight: '600', 
+                   transition: '0.3s', 
+                   '&:hover': {
+                       boxShadow: 4, 
+                   },
+               }}
+           >
+               {previousScores 
+                   ? `You have already taken this quiz. Your score: ${previousScores.obtainedScore}` 
+                   : 'Thank you for taking the test! Your score: ' + marks}
+           </Typography>
             ) : (
                 questions.map((question) => (
                     <Box key={question.id} sx={{ marginBottom: '20px', backgroundColor: '#fff', borderRadius: '4px', padding: '16px', boxShadow: 2 }}>

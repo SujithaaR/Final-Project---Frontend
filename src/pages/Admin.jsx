@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -97,7 +98,14 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h2>Admin Dashboard</h2>
+         <h2 className="admin-header">
+        Admin Dashboard
+        </h2>
+        <div className="nav-links">
+        <Link to="/admin/feedback">Employee Feedback</Link>
+        <Link to="/admin/comments">Employee Comments</Link>
+        <Link to="/admin/scores">Employee scores</Link>
+      </div>
 
       <div className="filters">
         <label>Select User:</label>

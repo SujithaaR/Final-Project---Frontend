@@ -5,9 +5,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 
-const departments = ['HR', 'Engineering', 'Marketing', 'Sales']; // Must match enum values
-const teams = ['Team A', 'Team B', 'Team C', 'Team D']; // Must match enum values
-
+const departments = ['HR', 'Engineering', 'Marketing', 'Sales'];
+const teams = ['Team A', 'Team B', 'Team C', 'Team D'];
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -16,9 +15,10 @@ const Register = () => {
         email: '',
         isAdmin: false,
         department: '',
-        team: ''
+        team: '',
+        adminCode: '' // New field for admin code
     });
-    const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -40,14 +40,14 @@ const Register = () => {
                 email: '',
                 isAdmin: false,
                 department: '',
-                team: ''
+                team: '',
+                adminCode: '' // Reset admin code field
             });
         } catch (error) {
             console.error('Registration error:', error.response.data);
             toast.error('Registration failed: ' + error.response.data.message);
         }
     };
-    
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -57,7 +57,7 @@ const Register = () => {
         <Container component="main" maxWidth="xs">
             <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography component="h1" variant="h5">
-                    Register
+                    Register New User
                 </Typography>
                 <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
                     <TextField
@@ -73,7 +73,7 @@ const Register = () => {
                         margin="normal"
                         required
                         fullWidth
-                        type={showPassword ? 'text' : 'password'} // Toggle password visibility
+                        type={showPassword ? 'text' : 'password'}
                         label="Password"
                         name="password"
                         value={formData.password}
@@ -81,10 +81,7 @@ const Register = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        edge="end"
-                                    >
+                                    <IconButton onClick={handleClickShowPassword} edge="end">
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>

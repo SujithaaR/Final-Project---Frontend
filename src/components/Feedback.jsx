@@ -18,7 +18,6 @@ const FeedbackPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { userId, courseId, enrollmentId } = location.state || {};
-
     const [overallSatisfaction, setOverallSatisfaction] = useState(0);
     const [contentQuality, setContentQuality] = useState(0);
     const [instructorEffectiveness, setInstructorEffectiveness] = useState(0);

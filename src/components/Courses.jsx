@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions,Grid} from '@mui/material';
+import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
@@ -102,32 +102,44 @@ const Courses = () => {
     };
 
     return (
-        <Container>
+        <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px' }}>
             <Typography 
                 variant="h4" 
                 gutterBottom 
                 style={{ 
                     marginTop: '20px', 
-                    color: '#00008B', 
+                    color: '#1976d2', 
                     fontWeight: 'bold', 
-                    textAlign: 'center', 
+                    textAlign: 'center',
+                    marginBottom:'30px' 
                 }}
             >
                 Available Courses
             </Typography>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{padding:'5px'}}>
                 {courses.map((course) => (
                     <Grid item xs={12} sm={6} md={4} key={course._id}>
-                        <Card variant="outlined" style={{ transition: '0.3s', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
+                        <Card 
+                            variant="outlined" 
+                            style={{ 
+                                transition: '0.3s', 
+                                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', 
+                                borderRadius: '10px', 
+                                '&:hover': { 
+                                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+                                    transform: 'translateY(-2px)',
+                                }
+                            }}
+                        >
                             <CardContent>
                                 <Typography variant="h5" component="div" style={{ fontWeight: 'bold', color: '#1976d2' }}>
                                     {course.title}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" color="text.secondary" style={{ marginTop: '10px' }}>
                                     {course.description}
                                 </Typography>
                             </CardContent>
-                            <CardActions style={{ justifyContent: 'space-between' }}>
+                            <CardActions style={{ justifyContent: 'space-between',marginBottom:'20px' }}>
                                 {enrolledCourses.includes(course._id) ? (
                                     <>
                                         <Button variant="contained" color="success" disabled>
