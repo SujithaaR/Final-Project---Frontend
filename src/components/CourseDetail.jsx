@@ -139,7 +139,7 @@ const CourseDetails = () => {
     };
 
     return (
-        <Container style={{ marginTop:'30px'}}>
+        <Container style={{ marginTop:'80px'}}>
             <IconButton onClick={handleBackClick} style={{ marginBottom: '20px', color: '#1976d2' }}>
                 <ArrowBackIcon />
             </IconButton>

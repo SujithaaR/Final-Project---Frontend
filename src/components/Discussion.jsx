@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -10,7 +10,7 @@ import {
     Alert,
     IconButton,
     Box,
-  
+    Grid
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -20,8 +20,28 @@ const Discussion = () => {
     const { userId, courseId, enrollmentId } = location.state || {};
     
     const [content, setContent] = useState('');
+    const [discussions, setDiscussions] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+
+
+
+     // Fetch discussions for the course when the component mounts
+     const fetchDiscussions = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/comment/course/${courseId}`);
+            setDiscussions(response.data);
+        } catch (error) {
+            console.error('Error fetching discussions:', error);
+        }
+    };
+
+
+    useEffect(() => {
+       
+        fetchDiscussions();
+    }, [courseId]);
+
 
     const handleSubmit = async () => {
         if (!content) {
@@ -38,8 +58,10 @@ const Discussion = () => {
                 content,
             });
 
+            setDiscussions(prev => [...prev, response.data]); // Add the new comment to the discussions
             setSnackbarMessage('Comment posted successfully.');
             setContent(''); // Clear content after submission
+            fetchDiscussions();
         } catch (error) {
             console.error('Error posting comment:', error);
             setSnackbarMessage('Error posting comment.');
@@ -61,11 +83,8 @@ const Discussion = () => {
         <Container 
             maxWidth="md" 
             style={{ 
-                backgroundColor: '#fff', 
-                padding: '40px 20px', // Increased padding
-                borderRadius: '8px', 
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', 
-                marginTop: '40px', // Margin at the top for separation
+                padding: '40px 20px',
+                marginTop: '40px',
             }}
         >
             <IconButton onClick={handleBackClick} style={{ marginBottom: '16px' }}>
@@ -105,6 +124,29 @@ const Discussion = () => {
                 Post Comment
             </Button>
 
+            <Box mt={4}>
+       {discussions.map((discussion) => (
+        <Grid container key={discussion._id} spacing={2} style={{ marginBottom: '10px' }}>
+            <Grid item xs={12} md={discussion.userId?._id === userId ? 12 : 12}>
+                <Box 
+                    style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        backgroundColor: discussion.userId?._id === userId ? '#e3f2fd' : '#f1f1f1',
+                        textAlign: discussion.userId?._id === userId ? 'right' : 'left',
+                    }}
+                >
+                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                        {discussion.userId?.username || 'Unknown User'}
+                    </Typography>
+                    <Typography variant="body2">{discussion.content}</Typography>
+                </Box>
+            </Grid>
+        </Grid>
+    ))}
+</Box>
+
+
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}
@@ -119,4 +161,3 @@ const Discussion = () => {
 };
 
 export default Discussion;
-

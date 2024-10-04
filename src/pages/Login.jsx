@@ -3,6 +3,7 @@ import { TextField, Button, Typography, Container, Box, IconButton, InputAdornme
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
+import { Close } from '@mui/icons-material'; // Import close icon
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -43,7 +44,7 @@ const Login = () => {
               if (response.data.user.isAdmin) {
                 navigate('/Admin'); // Navigate to admin dashboard
             } else {
-                navigate('/courses'); // Navigate to the courses page
+                navigate('/employee/dashboard'); // Navigate to the courses page
             }
         } catch (error) {
             setSnackbarMessage('Login failed: ' + error.response.data.message);
@@ -61,8 +62,12 @@ const Login = () => {
         setSnackbarOpen(false);
     };
 
+    const handleCloseButtonClick = () => {
+        navigate('/'); // Navigate to home
+    };
+
     return (
-        <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+        <Container component="main" maxWidth="xs" sx={{ mt: 25 }}>
         <Box 
             sx={{ 
                 display: 'flex', 
@@ -74,9 +79,17 @@ const Login = () => {
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
             }}
         >
-            <Typography component="h1" variant="h5" sx={{ fontWeight: 'bold', color: '#34495e', mb: 2 }}>
-                Login
-            </Typography>
+             <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mb: 2 }}>
+                    <Typography component="h1" variant="h5" sx={{ fontWeight: 'bold', color: '#34495e' }}>
+                        Login
+                    </Typography>
+                    <IconButton 
+                        onClick={handleCloseButtonClick} 
+                        sx={{ color: '#34495e' }} // Adjust color as needed
+                    >
+                        <Close />
+                    </IconButton>
+                </Box>
             <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
                 <TextField
                     margin="normal"

@@ -3,6 +3,7 @@ import Chart from "react-apexcharts";
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
+import EnrollmentStats from "./EnrollmentStats";
 
 const AdminDashboard = () => {
   const [enrollmentData, setEnrollmentData] = useState([]);
@@ -95,7 +96,7 @@ const AdminDashboard = () => {
         series: [feedbackGiven, enrollments.length - feedbackGiven],
         options: {
           chart: { type: "donut" },
-          labels: ["Feedback Given", "No Feedback"],
+          labels: ["Feedback Given", "Feedback Not Given"],
         },
       },
     };
@@ -107,7 +108,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h2 className="admin-header">Admin Dashboard</h2>
+      <h2 className="admin-header" style={{marginTop:'50px',justifyContent:"center",marginBottom:'50px'}}>Admin Dashboard</h2>
       <div className="nav-links">
         <Link to="/admin/feedback">Employee Feedback</Link>
         <Link to="/admin/comments">Employee Comments</Link>
@@ -171,7 +172,9 @@ const AdminDashboard = () => {
           <Chart options={chartData.feedbackChart.options} series={chartData.feedbackChart.series} type="donut" width="380" />
         </div>
       </div>
+      <EnrollmentStats/>
     </div>
+    
   );
 };
 

@@ -59,11 +59,11 @@ const Comments = () => {
         let filtered = comments;
 
         if (selectedUsername) {
-            filtered = filtered.filter(comment => comment.userId.username === selectedUsername);
+            filtered = filtered.filter(comment => comment.userId && comment.userId.username === selectedUsername);
         }
 
         if (selectedCourse) {
-            filtered = filtered.filter(comment => comment.courseId.title === selectedCourse);
+            filtered = filtered.filter(comment => comment.courseId && comment.courseId.title === selectedCourse);
         }
 
         setFilteredComments(filtered);
@@ -86,14 +86,14 @@ const Comments = () => {
     }
 
     return (
-        <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px' }}>
+        <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px', marginTop: '60px' }}>
             <Button 
                 variant="contained" 
                 color="primary" 
                 onClick={() => navigate('/admin')} 
                 style={{ marginBottom: '20px', marginTop: '20px' }}
             >
-                Back to Admin Dashboard
+                Back
             </Button>
 
             <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: '#34495e' }}>
@@ -105,7 +105,7 @@ const Comments = () => {
                 <Select
                     value={selectedUsername}
                     onChange={(e) => setSelectedUsername(e.target.value)}
-                    style={{ borderRadius: '5px' }} // Add border radius
+                    style={{ borderRadius: '5px' }}
                 >
                     <MenuItem value="">
                         <em>All Users</em>
@@ -123,7 +123,7 @@ const Comments = () => {
                 <Select
                     value={selectedCourse}
                     onChange={(e) => setSelectedCourse(e.target.value)}
-                    style={{ borderRadius: '5px' }} // Add border radius
+                    style={{ borderRadius: '5px' }}
                 >
                     <MenuItem value="">
                         <em>All Courses</em>
@@ -144,9 +144,9 @@ const Comments = () => {
                                 marginBottom: '20px', 
                                 borderRadius: '10px', 
                                 boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', 
-                                transition: 'transform 0.2s', 
+                                transition: 'transform 0.2s',
                                 '&:hover': {
-                                    transform: 'scale(1.02)', // Scale effect on hover
+                                    transform: 'scale(1.02)',
                                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
                                 }
                             }} 

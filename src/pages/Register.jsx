@@ -54,9 +54,9 @@ const Register = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" >
             <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h5"style={{marginTop:'60px'}}>
                     Register New User
                 </Typography>
                 <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
@@ -147,6 +147,8 @@ const Register = () => {
             </Box>
             <ToastContainer />
         </Container>
+
+        
     );
 };
 

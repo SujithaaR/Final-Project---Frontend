@@ -74,7 +74,7 @@ const FeedbackPage = () => {
                 padding: '40px 20px',
                 borderRadius: '8px', 
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', 
-                marginTop: '40px', 
+                marginTop: '100px', 
                 marginBottom: '20px'
             }}
         >

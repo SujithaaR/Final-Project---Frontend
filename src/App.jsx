@@ -15,6 +15,10 @@ import AdminFeedback from './pages/AdminFeedback';
 import AdminComments from './pages/AdminComments';
 import ScorePage from './pages/Score';
 import AdminCourse from './pages/AdminCourse';
+import EmployeeDashboard from './components/EmployeeDashboard';
+import UserManagement from './pages/UserManagement';
+import ProfilePage from './components/ProfilePage';
+
 
 const App = () => {
     return (
@@ -34,6 +38,9 @@ const App = () => {
                 <Route path="/admin/comments" element={<AdminComments />} />
                 <Route path="/admin/scores" element={<ScorePage/>}/>
                 <Route path="/admin-course" element={<AdminCourse/>}/>
+                <Route path="/employee/dashboard" element={<EmployeeDashboard/>}/>
+                <Route path="/all/users" element={<UserManagement/>}/>
+                <Route path="/user-profile" element={<ProfilePage/>}/>
             </Routes>
         </Router>
     );

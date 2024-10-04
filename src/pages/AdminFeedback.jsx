@@ -77,14 +77,14 @@ const Feedback = () => {
     }
 
     return (
-        <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px' }}>
+        <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px',marginTop:'60px' }}>
             <Button 
                 variant="contained" 
                 color="primary"
                 onClick={() => navigate('/admin')}
                 style={{ marginBottom: '20px', marginTop: '20px' }}
             >
-                Back to Admin Dashboard
+                Back
             </Button>
 
             <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: '#34495e' }}>

@@ -22,7 +22,7 @@ import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Score as ScoreIcon } from '@mui/icons-material';
 import { Chart, registerables } from 'chart.js';
-import { useNavigate } from 'react-router-dom'; // Change here
+import { useNavigate } from 'react-router-dom';
 
 // Register all necessary components
 Chart.register(...registerables);
@@ -36,7 +36,7 @@ const ScorePage = () => {
   const [courseFilter, setCourseFilter] = useState('');
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
-  const navigate = useNavigate(); // Use useNavigate here
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuizResults = async () => {
@@ -44,9 +44,8 @@ const ScorePage = () => {
         const response = await axios.get('http://localhost:3000/api/quizzes/all');
         if (Array.isArray(response.data)) {
           setQuizResults(response.data);
-          // Extract unique users and courses for filtering
-          const uniqueUsers = [...new Set(response.data.map(result => result.userId.username))];
-          const uniqueCourses = [...new Set(response.data.map(result => result.courseId.title))];
+          const uniqueUsers = [...new Set(response.data.map(result => result.userId?.username).filter(Boolean))];
+          const uniqueCourses = [...new Set(response.data.map(result => result.courseId?.title).filter(Boolean))];
           setUsers(uniqueUsers);
           setCourses(uniqueCourses);
         } else {
@@ -78,14 +77,14 @@ const ScorePage = () => {
 
   // Filter results based on selected filters
   const filteredResults = quizResults.filter(result => {
-    const userMatches = userFilter ? result.userId.username === userFilter : true;
-    const courseMatches = courseFilter ? result.courseId.title === courseFilter : true;
+    const userMatches = userFilter ? result.userId?.username === userFilter : true;
+    const courseMatches = courseFilter ? result.courseId?.title === courseFilter : true;
     return userMatches && courseMatches;
   });
 
   // Prepare data for performance analysis
   const performanceData = {
-    labels: filteredResults.map(result => `${result.userId.username} (${result.courseId.title})`),
+    labels: filteredResults.map(result => `${result.userId?.username || 'Unknown'} (${result.courseId?.title || 'Unknown'})`),
     datasets: [
       {
         label: 'Obtained Score',
@@ -101,13 +100,13 @@ const ScorePage = () => {
   };
 
   return (
-    <Container>
+    <Container style={{marginTop:'60px'}}>
       <Button
         variant="contained"
-        onClick={() => navigate('/admin')} // Use navigate here
-        style={{ marginBottom: '20px' ,marginTop:'30px'}}
+        onClick={() => navigate('/admin')}
+        style={{ marginBottom: '20px', marginTop: '30px' }}
       >
-        Back to Admin Dashboard
+        Back
       </Button>
 
       <Typography variant="h4" gutterBottom>
@@ -163,8 +162,8 @@ const ScorePage = () => {
                   {filteredResults.length > 0 ? (
                     filteredResults.map((result) => (
                       <TableRow key={result._id}>
-                        <TableCell>{result.userId.username}</TableCell>
-                        <TableCell>{result.courseId.title}</TableCell>
+                        <TableCell>{result.userId?.username || 'Unknown'}</TableCell>
+                        <TableCell>{result.courseId?.title || 'Unknown'}</TableCell>
                         <TableCell>{result.totalScore}</TableCell>
                         <TableCell>{result.obtainedScore}</TableCell>
                         <TableCell>

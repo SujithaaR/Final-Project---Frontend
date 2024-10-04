@@ -109,7 +109,7 @@ const StaticQuiz = () => {
     };
 
     return (
-        <Container sx={{ padding: '20px',  }}>
+        <Container sx={{ padding: '20px',marginTop:'60px'  }}>
             <IconButton onClick={handleBackClick} style={{ marginBottom: '16px' }}>
                 <ArrowBackIcon />
             </IconButton>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions, Grid } from '@mui/material';
+import { Container, Typography, Button, Snackbar, Card, CardContent, CardActions, Grid, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
@@ -10,6 +10,7 @@ const Courses = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
 
     const navigate = useNavigate();
 
@@ -101,23 +102,39 @@ const Courses = () => {
         navigate(`/courses/${courseId}`, { state: { enrollmentId, courseId } });
     };
 
+    // Filtered courses based on search term
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <Container style={{ padding: '20px', backgroundColor: '#f4f7fc', borderRadius: '8px' }}>
             <Typography 
                 variant="h4" 
                 gutterBottom 
                 style={{ 
-                    marginTop: '20px', 
+                    marginTop: '70px', 
                     color: '#1976d2', 
                     fontWeight: 'bold', 
                     textAlign: 'center',
-                    marginBottom:'30px' 
+                    marginBottom: '30px' 
                 }}
             >
                 Available Courses
             </Typography>
-            <Grid container spacing={3} style={{padding:'5px'}}>
-                {courses.map((course) => (
+            
+            {/* Search Input */}
+            <TextField
+                label="Search Courses"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+
+            <Grid container spacing={3} style={{ padding: '5px' ,marginTop:'20px'}}>
+                {filteredCourses.map((course) => (
                     <Grid item xs={12} sm={6} md={4} key={course._id}>
                         <Card 
                             variant="outlined" 
@@ -125,10 +142,6 @@ const Courses = () => {
                                 transition: '0.3s', 
                                 boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', 
                                 borderRadius: '10px', 
-                                '&:hover': { 
-                                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
-                                    transform: 'translateY(-2px)',
-                                }
                             }}
                         >
                             <CardContent>
@@ -139,7 +152,7 @@ const Courses = () => {
                                     {course.description}
                                 </Typography>
                             </CardContent>
-                            <CardActions style={{ justifyContent: 'space-between',marginBottom:'20px' }}>
+                            <CardActions style={{ justifyContent: 'space-between', marginBottom: '20px' }}>
                                 {enrolledCourses.includes(course._id) ? (
                                     <>
                                         <Button variant="contained" color="success" disabled>
@@ -149,7 +162,7 @@ const Courses = () => {
                                             variant="outlined"
                                             onClick={() => handleGetStarted(course._id, enrollmentIds[course._id])}
                                         >
-                                            Get Started
+                                            Go to Course
                                         </Button>
                                     </>
                                 ) : (

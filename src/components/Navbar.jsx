@@ -13,7 +13,7 @@ const Navbar = () => {
       
         if (sessionStartTime && token) {
             const sessionEndTime = Date.now();
-            const sessionDuration = (sessionEndTime - sessionStartTime) / 1000; // Time in seconds
+            const sessionDuration = Math.floor((sessionEndTime - sessionStartTime) / 1000); // Time in seconds
           
             try {
                 
@@ -43,7 +43,7 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
                     Course Management System
@@ -62,15 +62,24 @@ const Navbar = () => {
                         <Button color="inherit" component={Link} to="/admin-course">
                             Course
                         </Button>
+                        <Button color="inherit" component={Link} to="/all/users">
+                            Users
+                        </Button>
+                        
+                        
                             </>
                         ) : (
-                            <>
+                            <> 
+                               <Button color="inherit" component={Link} to="/employee/dashboard">
+                                    Dashboard
+                                </Button>
                                 <Button color="inherit" component={Link} to="/courses">
                                     Courses
                                 </Button>
-                                <Typography color="inherit" >
-                                    EMPLOYEE
-                                </Typography>
+                                <Button color="inherit" component={Link} to="/user-profile">
+                                    Profile
+                                </Button>
+                                
                             </>
                         )}
                         <Button color="inherit" onClick={handleLogout}>
@@ -82,7 +91,9 @@ const Navbar = () => {
                         <Button color="inherit" component={Link} to="/login">
                             Login
                         </Button>
-                       
+                        <Button color="inherit" component={Link} to="/">
+                            Home
+                        </Button>
                     </>
                 )}
             </Toolbar>
