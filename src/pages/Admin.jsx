@@ -108,7 +108,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h2 className="admin-header" style={{marginTop:'50px',justifyContent:"center",marginBottom:'50px'}}>Admin Dashboard</h2>
+      <h2 className="admin-header" style={{ marginTop: '50px', justifyContent: "center", marginBottom: '50px' }}>Admin Dashboard</h2>
       <div className="nav-links">
         <Link to="/admin/feedback">Employee Feedback</Link>
         <Link to="/admin/comments">Employee Comments</Link>
@@ -128,6 +128,15 @@ const AdminDashboard = () => {
       </div>
 
       <div className="cards">
+        {/* New Card for Total Employees */}
+
+        {!selectedUser && 
+             <div className="card">
+             <h4>Total Employees</h4>
+             <p>{userOptions.length}</p> {/* Display total number of employees */}
+           </div>
+        }
+       
         <div className="card">
           <h4>Total Courses Enrolled</h4>
           <p>{filteredData.length}</p>
@@ -140,6 +149,7 @@ const AdminDashboard = () => {
           <h4>Quizzes Taken</h4>
           <p>{filteredData.filter((enroll) => enroll.isQuizTaken).length}</p>
         </div>
+        
 
         {/* Only render the Total Time Spent card when a specific user is selected */}
         {selectedUser && (
@@ -172,9 +182,8 @@ const AdminDashboard = () => {
           <Chart options={chartData.feedbackChart.options} series={chartData.feedbackChart.series} type="donut" width="380" />
         </div>
       </div>
-      <EnrollmentStats/>
+      <EnrollmentStats />
     </div>
-    
   );
 };
 

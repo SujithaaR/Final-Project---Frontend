@@ -78,7 +78,7 @@ const FeedbackPage = () => {
                 marginBottom: '20px'
             }}
         >
-            <IconButton onClick={handleBackClick} style={{ marginBottom: '16px' }}>
+            <IconButton onClick={handleBackClick} style={{ marginBottom: '16px', color: '#1976d2' }}>
                 <ArrowBackIcon />
             </IconButton>
 

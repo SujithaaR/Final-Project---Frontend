@@ -11,6 +11,8 @@ import {
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateCourse = () => {
   const [course, setCourse] = useState({
@@ -62,10 +64,9 @@ const CreateCourse = () => {
   const handleAddContent = (topicIndex, subtopicIndex) => {
     const newTopics = [...course.topics];
     newTopics[topicIndex].subtopics[subtopicIndex].contents.push({
-
       content_type: 'text',
       content: '',
-      completed: false
+      completed: false,
     });
     setCourse({ ...course, topics: newTopics });
   };
@@ -88,6 +89,7 @@ const CreateCourse = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/more', course);
       console.log('Course created:', response.data);
+      toast.success('Course created successfully!'); // Show success toast
       setCourse({ title: '', description: '', topics: [] });
     } catch (error) {
       if (error.response) {
@@ -245,7 +247,9 @@ const CreateCourse = () => {
           </Button>
         </form>
       </Paper>
+      <ToastContainer /> {/* Add the ToastContainer here */} 
     </Box>
+    
   );
 };
 

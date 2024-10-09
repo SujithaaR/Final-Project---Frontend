@@ -43,7 +43,7 @@ const EmployeeDashboard = () => {
         setFilteredEnrollments(enrollmentResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Failed to fetch enrolled courses.");
+        setError("No Courses Enrolled");
       }
     };
 
