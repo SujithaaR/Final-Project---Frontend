@@ -133,54 +133,54 @@ const Courses = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Grid container spacing={3} style={{ padding: '5px', marginTop: '20px' }}>
-    {filteredCourses.map((course) => (
-        <Grid item xs={12} sm={6} md={4} key={course._id}>
-            <Card
-                variant="outlined"
-                style={{
-                    transition: '0.3s',
-                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-                    borderRadius: '10px',
-                    height: '300px', // Set a fixed height
-                    display: 'flex',
-                    flexDirection: 'column', // Use flexbox to arrange content
-                }}
-            >
-                <CardContent style={{ flexGrow: 1 }}> {/* Allow CardContent to grow */}
-                    <Typography variant="h5" component="div" style={{ fontWeight: 'bold', color: '#1976d2' }}>
-                        {course.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" style={{ marginTop: '10px' }}>
-                        {course.description}
-                    </Typography>
-                </CardContent>
-                <CardActions style={{ justifyContent: 'space-between', marginBottom: '20px' }}>
-                    {enrolledCourses.includes(course._id) ? (
-                        <>
-                            <Button variant="contained" color="success" disabled>
-                                Enrolled
-                            </Button>
+            {filteredCourses.map((course) => (
+                <Grid item xs={12} sm={6} md={4} key={course._id}>
+                    <Card
+                    variant="outlined"
+                    style={{
+                        transition: '0.3s',
+                        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                        borderRadius: '10px',
+                        height: '300px', // Set a fixed height
+                        display: 'flex',
+                        flexDirection: 'column', // Use flexbox to arrange content
+                    }}
+                    >
+                    <CardContent style={{ flexGrow: 1 }}> {/* Allow CardContent to grow */}
+                        <Typography variant="h5" component="div" style={{ fontWeight: 'bold', color: '#1976d2' }}>
+                            {course.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" style={{ marginTop: '10px' }}>
+                            {course.description}
+                        </Typography>
+                    </CardContent>
+                    <CardActions style={{ justifyContent: 'space-between', marginBottom: '20px' }}>
+                        {enrolledCourses.includes(course._id) ? (
+                            <>
+                                <Button variant="contained" color="success" disabled>
+                                    Enrolled
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => handleGetStarted(course._id, enrollmentIds[course._id])}
+                                >
+                                    Go to Course
+                                </Button>
+                            </>
+                        ) : (
                             <Button
-                                variant="outlined"
-                                onClick={() => handleGetStarted(course._id, enrollmentIds[course._id])}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleEnroll(course._id)}
                             >
-                                Go to Course
+                                Enroll
                             </Button>
-                        </>
-                    ) : (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => handleEnroll(course._id)}
-                        >
-                            Enroll
-                        </Button>
-                    )}
-                </CardActions>
-            </Card>
-        </Grid>
-    ))}
-</Grid>
+                            )}
+                    </CardActions>
+                </Card>
+                </Grid>
+                ))}
+           </Grid>
 
             <Snackbar
                 open={snackbarOpen}

@@ -29,7 +29,7 @@ const Comments = () => {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/admin/all/comments');
+                const response = await axios.get('http://localhost:3000/api/admin/all/comments'); //fetching all the comments
                 setComments(response.data);
                 setFilteredComments(response.data);
             } catch (err) {
@@ -42,8 +42,8 @@ const Comments = () => {
 
         const fetchUsersAndCourses = async () => {
             try {
-                const usersResponse = await axios.get('http://localhost:3000/api/users/all');
-                const coursesResponse = await axios.get('http://localhost:3000/api/courses');
+                const usersResponse = await axios.get('http://localhost:3000/api/users/all'); //fetching the users
+                const coursesResponse = await axios.get('http://localhost:3000/api/courses'); //fetching the course
                 setUsers(usersResponse.data);
                 setCourses(coursesResponse.data);
             } catch (err) {

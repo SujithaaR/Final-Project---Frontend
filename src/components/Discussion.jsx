@@ -24,21 +24,18 @@ const Discussion = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
-
      // Fetch discussions for the course when the component mounts
      const fetchDiscussions = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3000/api/comment/course/${courseId}`);
-            setDiscussions(response.data);
-        } catch (error) {
-            console.error('Error fetching discussions:', error);
-        }
+         try {
+             const response = await axios.get(`http://localhost:3000/api/comment/course/${courseId}`);
+             setDiscussions(response.data);
+         } catch (error) {
+             console.error('Error fetching discussions:', error);
+         }
     };
 
 
     useEffect(() => {
-       
         fetchDiscussions();
     }, [courseId]);
 
@@ -125,27 +122,26 @@ const Discussion = () => {
             </Button>
 
             <Box mt={4}>
-       {discussions.map((discussion) => (
-        <Grid container key={discussion._id} spacing={2} style={{ marginBottom: '10px' }}>
-            <Grid item xs={12} md={discussion.userId?._id === userId ? 12 : 12}>
-                <Box 
-                    style={{
-                        padding: '10px',
-                        borderRadius: '5px',
-                        backgroundColor: discussion.userId?._id === userId ? '#e3f2fd' : '#f1f1f1',
-                        textAlign: discussion.userId?._id === userId ? 'right' : 'left',
-                    }}
-                >
-                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                        {discussion.userId?.username || 'Unknown User'}
-                    </Typography>
-                    <Typography variant="body2">{discussion.content}</Typography>
-                </Box>
-            </Grid>
-        </Grid>
-    ))}
-</Box>
-
+                {discussions.map((discussion) => (
+                    <Grid container key={discussion._id} spacing={2} style={{ marginBottom: '10px' }}>
+                        <Grid item xs={12} md={discussion.userId?._id === userId ? 12 : 12}>
+                            <Box 
+                                style={{
+                                    padding: '10px',
+                                    borderRadius: '5px',
+                                    backgroundColor: discussion.userId?._id === userId ? '#e3f2fd' : '#f1f1f1',
+                                    textAlign: discussion.userId?._id === userId ? 'right' : 'left',
+                                }}
+                            >
+                                <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                                    {discussion.userId?.username || 'Unknown User'}
+                                </Typography>
+                                <Typography variant="body2">{discussion.content}</Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    ))}
+            </Box>
 
             <Snackbar
                 open={snackbarOpen}

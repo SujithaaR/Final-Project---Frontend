@@ -24,8 +24,6 @@ const Navbar = () => {
                         Authorization: `Bearer ${token}`, // Pass token for authentication
                     },
                 });
-    
-                console.log(`Session time sent: ${sessionDuration} seconds`);
             } catch (error) {
                 console.error('Error updating time spent:', error);
                 alert('Error updating your session time. Please try again later.');
