@@ -16,7 +16,6 @@ const Register = () => {
         isAdmin: false,
         department: '',
         team: '',
-        adminCode: '' // New field for admin code
     });
     const [showPassword, setShowPassword] = useState(false);
 
@@ -41,7 +40,6 @@ const Register = () => {
                 isAdmin: false,
                 department: '',
                 team: '',
-                adminCode: '' // Reset admin code field
             });
         } catch (error) {
             console.error('Registration error:', error.response.data);
